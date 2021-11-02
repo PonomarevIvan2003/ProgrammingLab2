@@ -1,0 +1,271 @@
+//Main1.java
+package com.company;
+
+import ru.ifmo.se.pokemon.*;
+public class Main1 {
+
+    public static void main(String[] args) {
+        Battle b = new Battle ();
+        Shuckle p1 = new Shuckle("Rostislav",100);
+        Stunky p2 = new Stunky ("Danilo",100);
+        Skuntank p3 = new Skuntank("Leonid", 100);
+        Magby p4 = new Magby("Mikhailo", 100);
+        Magmar p5 = new Magmar("Klim Sanych", 100);
+        Magmar p6 = new Magmortar("Dmitrii Urich",100);
+        b.addAlly(p1);
+        b.addFoe(p2);
+        b.addFoe(p3);
+        b.addAlly(p4);
+        b.addAlly(p6);
+        b.addFoe(p5);
+        b.go();
+    }
+}
+//Shuckle.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Shuckle extends Pokemon {
+    public Shuckle (String name, int level){
+        super(name, level);
+        setStats(20,10,230, 10, 230, 5);
+        setType(Type.BUG, Type.ROCK);
+        setMove(new SludgeBomb(), new Minimize(), new Confide(), new Venoshock());
+    }
+}
+//Stunky.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Stunky extends Pokemon {
+    public Stunky (String name, int level){
+        super(name,level);
+        setStats(63,63, 47, 41, 41, 74);
+        setType(Type.POISON,Type.DARK);
+        setMove(new DoubleTeam(),new ThunderWave(), new TakeDown());
+    }
+}
+//Skuntank.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Skuntank extends Stunky {
+    public Skuntank(String name, int level){
+        super(name,level);
+        setType(Type.DARK,Type.POISON);
+        setStats(103,93, 67, 71, 61, 84);
+        setMove(new DoubleTeam(), new ThunderWave(), new TakeDown(), new Spark());
+    }
+}
+//Magby.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Magby extends Pokemon {
+    public Magby(String name, int level){
+        super(name,level);
+        setType(Type.FIRE);
+        setStats(45, 75, 37, 70, 55, 83);
+        setMove(new DoubleTeam(), new Rest());
+    }
+}
+//Magmar.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Magmar extends Magby{
+    public Magmar(String name, int level){
+        super(name,level);
+        setType(Type.FIRE);
+        setStats(65,95,57, 100, 85, 93);
+        setMove(new Rest(),new DoubleEdge(), new DoubleTeam());
+    }
+}
+//Magmortar.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Magmortar extends Magmar {
+    public Magmortar(String name, int level){
+        super(name,level);
+        setType(Type.FIRE);
+        setStats(75,95, 67, 125, 95, 83);
+        setMove(new Rest(), new DoubleTeam(), new DoubleEdge(), new MegaDrain());
+    }
+}
+//SludgeBomb.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class SludgeBomb extends SpecialMove {
+    protected SludgeBomb (){
+        super(Type.POISON, 90, 100 );
+    }
+    @Override
+    protected void applyOppEffects(Pokemon p){
+        if (Math.random()<=0.3) Effect.poison(p);
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Sludge Bomb";
+    }
+}
+//Minimize.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Minimize extends StatusMove {
+    protected Minimize() {
+        super(Type.NORMAL, 0, 100);
+    }
+    @Override
+    protected void applySelfEffects(Pokemon p) {
+        p.setMod(Stat.EVASION, +2);
+    }
+    @Override
+    protected String describe() {
+        return "Применяет атаку Minimize";
+    }
+ }
+//Confide.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Confide extends StatusMove {
+    protected Confide(){
+        super(Type.NORMAL, 0,100);
+    }
+    @Override
+    protected void applyOppEffects(Pokemon p){
+        p.setMod(Stat.SPECIAL_ATTACK, -1);
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Confide";
+    }
+}
+//Venoshock.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Venoshock extends SpecialMove {
+    protected Venoshock(){
+        super(Type.POISON, 65, 100);
+    }
+    @Override
+    protected void applyOppDamage(Pokemon def, double damage){
+        if (def.getCondition()==(Status.POISON)){
+            super.applyOppDamage(def,damage*2);
+        }
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Venoshock";
+    }
+}
+//DoubleTeam.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class DoubleTeam extends StatusMove {
+    protected DoubleTeam(){
+        super(Type.NORMAL, 0, 100);
+    }
+    @Override
+    protected void applySelfEffects(Pokemon p){
+        p.setMod(Stat.EVASION, +1);
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Double Team";
+    }
+}
+//ThunderWave.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class ThunderWave extends StatusMove{
+    protected ThunderWave(){
+        super(Type.ELECTRIC, 0,90);
+    }
+    @Override
+    protected void applyOppEffects(Pokemon p){
+        Effect.paralyze(p);
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Thunder Wave";
+    }
+}
+//TakeDown.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class TakeDown extends PhysicalMove {
+    protected TakeDown(){
+        super(Type.NORMAL, 90, 85);
+    }
+    @Override
+    protected void applySelfDamage(Pokemon att, double damage){
+        att.setMod(Stat.HP,(int) (damage/4));
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Take Down";
+    }
+}
+//Spark.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Spark extends PhysicalMove {
+    protected Spark(){
+        super(Type.ELECTRIC,65, 100);
+    }
+    @Override
+    protected void applyOppEffects(Pokemon p){
+        if (Math.random()<=0.3){
+            Effect.paralyze(p);
+        }
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Spark";
+    }
+}
+//Rest.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class Rest extends StatusMove{
+    protected Rest(){
+        super(Type.PSYCHIC, 0,100);
+    }
+    @Override
+    protected void applySelfEffects(Pokemon p){
+        Effect rest1 = new Effect().turns(2).condition(Status.SLEEP);
+        p.setMod(Stat.HP,(int) (p.getHP()-p.getStat(Stat.HP)));
+        p.addEffect(rest1);
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Rest";
+    }
+}
+//DoubleEdge.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class DoubleEdge extends PhysicalMove {
+    protected DoubleEdge(){
+        super(Type.NORMAL,120,100);
+    }
+    @Override
+    protected void applySelfDamage(Pokemon att, double damage){
+        att.setMod(Stat.HP,(int)(damage/3));
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Double-Edge";
+    }
+}
+//MegaDrain.java
+package com.company;
+import ru.ifmo.se.pokemon.*;
+public class MegaDrain extends SpecialMove{
+    protected MegaDrain(){
+        super(Type.GRASS,40,100);
+    }
+    @Override
+    protected void applySelfDamage(Pokemon att, double damage){
+        att.setMod(Stat.HP,(int) -(damage/2));
+    }
+    @Override
+    protected String describe(){
+        return "Применяет атаку Mega Drain";
+    }
+}
